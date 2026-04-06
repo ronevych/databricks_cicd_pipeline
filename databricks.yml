@@ -33,6 +33,10 @@ targets:
     variables:
       catalog: dbr_dev
       schema: ronevych_test
+    resources:
+      pipelines:
+        ronevych_vgs_pipeline:
+          target: ronevych_test
 
 resources:
   pipelines:
