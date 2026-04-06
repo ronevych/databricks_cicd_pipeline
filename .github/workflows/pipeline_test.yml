@@ -41,4 +41,4 @@ jobs:
         run: databricks bundle deploy -t test
 
       - name: Run Pipeline in TEST
-        run: databricks bundle run ronevych_vgs_pipeline -t test --wait
+        run: databricks bundle run ronevych_vgs_pipeline -t test
