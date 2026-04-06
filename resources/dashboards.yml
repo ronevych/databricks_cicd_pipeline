@@ -2,12 +2,12 @@ resources:
   dashboards:
     video_games_dashboard:
       display_name: "VG Sales Analytics [${bundle.target}]"
-      file_path: ../src/Lab5/dashboards/VideogamesDashboard.lvdash.json 
+      file_path: src/Lab5/dashboards/VideogamesDashboard.lvdash.json 
       
       warehouse_id: ${var.sql_warehouse_id}
       
       permissions:
-        - user_name: lbiel@softserve.academy
+        - user_name: lukasz@softserve.academy
           level: CAN_MANAGE
         - group_name: users
           level: CAN_VIEW

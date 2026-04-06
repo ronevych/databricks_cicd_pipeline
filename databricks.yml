@@ -6,14 +6,14 @@ include:
 
 variables:
   catalog:
-    description: "Name of the catalog to use for tables"
+    description: "Catalog name"
     default: dbr_dev
   schema:
-    description: "Name of the schema to use for tables"
+    description: "Schema name"
     default: ronevych_gold
   sql_warehouse_id:
-    description: "ID for SQL Warehouse"
-    default: "a1f04664c7fcffa4" 
+    description: "ID of the SQL Warehouse"
+    default: "bfab7bf7a47d6172" 
 
 targets:
   dev:
@@ -26,19 +26,18 @@ targets:
       schema: ronevych_gold
 
   test:
-    mode: production 
+    mode: production
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
       root_path: /Shared/.bundle/${bundle.name}/${target.name}
     variables:
-      catalog: ronevych_test
-      schema: gold
+      catalog: dbr_dev
+      schema: ronevych_test
 
 resources:
   pipelines:
     ronevych_vgs_pipeline:
       name: "[${bundle.target} ronevych] lab6_videogames_etl"
-      
       catalog: ${var.catalog}
       target: ${var.schema}
       
@@ -48,11 +47,9 @@ resources:
       libraries:
         - file: { path: ./src/Lab5/utilities/data_contracts.py }
         - file: { path: ./src/Lab5/transformations/01_bronze.py }
-        - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
+        - file: { path: ./src/Lab5/transformations/02_silver_scd.py } # ВИПРАВЛЕНО ТУТ
         - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
         - file: { path: ./src/Lab5/transformations/04_gold.py }
       
       development: true
       serverless: true
-      channel: CURRENT
-      photon: true

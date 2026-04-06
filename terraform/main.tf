@@ -14,20 +14,20 @@ provider "databricks" {
   token = var.databricks_token
 }
 
-resource "databricks_catalog" "test_catalog" {
-  name    = "ronevych_test"
-  comment = "Catalog for Lab 7 TEST environment"
+resource "databricks_schema" "test_schema" {
+  catalog_name = "dbr_dev"
+  name         = "ronevych_test"
+  comment      = "Managed by Terraform: Isolated schema for Lab 7 testing"
 }
 
 resource "databricks_grant" "admin_access" {
-  catalog    = databricks_catalog.test_catalog.name
-  principal  = "lbiel@softserve.academy" # Перевір спелінг email!
+  schema     = databricks_schema.test_schema.id
+  principal  = "lbiel@softserve.academy" 
   privileges = ["ALL_PRIVILEGES"]
 }
 
 resource "databricks_grant" "others_browse" {
-  catalog    = databricks_catalog.test_catalog.name
+  schema     = databricks_schema.test_schema.id
   principal  = "account users"
-  # Для каталогу використовуємо USE_CATALOG та BROWSE
-  privileges = ["USE_CATALOG", "BROWSE"] 
+  privileges = ["USAGE", "BROWSE"] 
 }
