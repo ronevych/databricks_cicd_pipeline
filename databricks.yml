@@ -7,16 +7,20 @@ targets:
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
 
+  test:
+    workspace:
+      host: https://adb-7405605185991044.4.azuredatabricks.net
+      root_path: /Shared/.bundle/${bundle.name}/${target.name}
+
 resources:
   pipelines:
     ronevych_vgs_pipeline:
-      name: "[dev ronevych] lab6_videogames_etl"
-      
+      name: "[${bundle.target} ronevych] lab6_videogames_etl"
       catalog: dbr_dev
-      schema: ronevych_gold 
+      target: ronevych_gold_test 
       
       configuration:
-        spark.env.PYTHONPATH: "/Workspace/Users/dmytro874@softserve.academy/.bundle/ronevych_videogames/dev/files/src/Lab5"
+        spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
 
       libraries:
         - file: { path: ./src/Lab5/utilities/data_contracts.py }
@@ -27,9 +31,3 @@ resources:
       
       development: true
       serverless: true
-      channel: CURRENT
-      photon: true
-
-      tags:
-        "dev": "ronevych"
-        "lab": "6"

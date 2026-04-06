@@ -29,7 +29,7 @@ jobs:
             -var="databricks_token=${{ env.DATABRICKS_TOKEN }}"
 
       - name: Install Databricks CLI
-        uses: databricks/setup-databricks@v0.7.0
+        uses: databricks/setup-cli@main
 
       - name: Bundle Deploy to TEST
         run: databricks bundle deploy -t test
