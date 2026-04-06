@@ -14,20 +14,15 @@ provider "databricks" {
   token = var.databricks_token
 }
 
-resource "databricks_schema" "test_schema" {
-  catalog_name = "dbr_dev"
-  name         = "ronevych_test"
-  comment      = "Managed by Terraform: Isolated schema for Lab 7 testing"
-}
-
 resource "databricks_grant" "admin_access" {
-  schema     = databricks_schema.test_schema.id
+  # Вказуємо повний шлях до існуючої схеми текстом
+  schema     = "dbr_dev.ronevych_test"
   principal  = "lbiel@softserve.academy" 
   privileges = ["ALL_PRIVILEGES"]
 }
 
 resource "databricks_grant" "others_browse" {
-  schema     = databricks_schema.test_schema.id
+  schema     = "dbr_dev.ronevych_test"
   principal  = "account users"
   privileges = ["USAGE"] 
 }
