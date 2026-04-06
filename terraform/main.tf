@@ -20,19 +20,14 @@ resource "databricks_catalog" "test_catalog" {
 }
 
 resource "databricks_grant" "admin_access" {
-  catalog = databricks_catalog.test_catalog.name
-
-  grant {
-    principal  = "lbiel@softserve.academy" 
-    privileges = ["ALL_PRIVILEGES"]
-  }
+  catalog    = databricks_catalog.test_catalog.name
+  principal  = "lbiel@softserve.academy" # Перевір спелінг email!
+  privileges = ["ALL_PRIVILEGES"]
 }
 
 resource "databricks_grant" "others_browse" {
-  catalog = databricks_catalog.test_catalog.name
-
-  grant {
-    principal  = "account users"
-    privileges = ["BROWSE", "USAGE"] 
-  }
+  catalog    = databricks_catalog.test_catalog.name
+  principal  = "account users"
+  # Для каталогу використовуємо USE_CATALOG та BROWSE
+  privileges = ["USE_CATALOG", "BROWSE"] 
 }
