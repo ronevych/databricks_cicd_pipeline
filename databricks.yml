@@ -29,7 +29,7 @@ targets:
     mode: production
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
-      root_path: /Shared/.bundle/${bundle.name}/${target.name}
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${target.name}
     variables:
       catalog: dbr_dev
       schema: ronevych_test
