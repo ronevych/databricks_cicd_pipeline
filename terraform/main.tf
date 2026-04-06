@@ -14,7 +14,7 @@ provider "databricks" {
   token = var.databricks_token
 }
 
-resource "databricks_grant" "schema_permissions" {
+resource "databricks_grants" "schema_permissions" {
   schema = "dbr_dev.ronevych_test"
 
   grant {
