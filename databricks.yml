@@ -51,5 +51,4 @@ resources:
         - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
         - file: { path: ./src/Lab5/transformations/04_gold.py }
       
-      development: true
       serverless: true
