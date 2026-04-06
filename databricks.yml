@@ -15,6 +15,13 @@ variables:
     description: "ID of the SQL Warehouse"
     default: "a1f04664c7fcffa4"
 
+terraform:
+  variables:
+    catalog:
+      type: string
+    schema:
+      type: string
+
 targets:
   dev:
     default: true
