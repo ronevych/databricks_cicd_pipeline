@@ -1,23 +1,46 @@
 bundle:
   name: ronevych_videogames
 
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: "Name of the catalog to use for tables"
+    default: dbr_dev
+  schema:
+    description: "Name of the schema to use for tables"
+    default: ronevych_gold
+  sql_warehouse_id:
+    description: "ID for SQL Warehouse"
+    default: "a1f04664c7fcffa4" 
+
 targets:
   dev:
     default: true
+    mode: development
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
+    variables:
+      catalog: dbr_dev
+      schema: ronevych_gold
 
   test:
+    mode: production 
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
       root_path: /Shared/.bundle/${bundle.name}/${target.name}
+    variables:
+      catalog: ronevych_test
+      schema: gold
 
 resources:
   pipelines:
     ronevych_vgs_pipeline:
       name: "[${bundle.target} ronevych] lab6_videogames_etl"
-      catalog: dbr_dev
-      target: ronevych_gold_test 
+      
+      catalog: ${var.catalog}
+      target: ${var.schema}
       
       configuration:
         spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
@@ -31,3 +54,5 @@ resources:
       
       development: true
       serverless: true
+      channel: CURRENT
+      photon: true

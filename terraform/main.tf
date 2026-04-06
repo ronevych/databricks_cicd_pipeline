@@ -14,22 +14,25 @@ provider "databricks" {
   token = var.databricks_token
 }
 
-resource "databricks_schema" "silver_test" {
-  catalog_name = "dbr_dev"
-  name         = "ronevych_silver_test"
-  comment      = "Silver layer for TEST environment"
+resource "databricks_catalog" "test_catalog" {
+  name    = "ronevych_test"
+  comment = "Catalog for Lab 7 TEST environment"
 }
 
-resource "databricks_schema" "gold_test" {
-  catalog_name = "dbr_dev"
-  name         = "ronevych_gold_test"
-  comment      = "Gold layer for TEST environment"
+resource "databricks_grant" "admin_access" {
+  catalog = databricks_catalog.test_catalog.name
+
+  grant {
+    principal  = "lbiel@softserve.academy" 
+    privileges = ["ALL_PRIVILEGES"]
+  }
 }
 
-resource "databricks_grant" "gold_usage" {
-  schema = databricks_schema.gold_test.id
-  privilege_assignments {
+resource "databricks_grant" "others_browse" {
+  catalog = databricks_catalog.test_catalog.name
+
+  grant {
     principal  = "account users"
-    privileges = ["USAGE", "SELECT"]
+    privileges = ["BROWSE", "USAGE"] 
   }
 }
