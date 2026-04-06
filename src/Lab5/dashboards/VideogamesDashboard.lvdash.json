@@ -7,7 +7,7 @@
         "SELECT \r\n",
         "  publisher, \r\n",
         "  total_global_sales \r\n",
-        "FROM dbr_dev.ronevych_test.gold_publisher_performance \r\n",
+        "FROM ${var.catalog}.${var.schema}.gold_publisher_performance \r\n",
         "ORDER BY total_global_sales DESC \r\n",
         "LIMIT 10"
       ]
@@ -20,7 +20,7 @@
         "  release_year, \r\n",
         "  genre, \r\n",
         "  yearly_global_sales \r\n",
-        "FROM dbr_dev.ronevych_test.gold_genre_trends\r\n",
+        "FROM ${var.catalog}.${var.schema}.gold_genre_trends\r\n",
         "WHERE release_year > 2000 \r\n",
         "ORDER BY release_year ASC"
       ]

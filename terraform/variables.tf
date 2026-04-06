@@ -1,13 +1,13 @@
 variable "catalog" {
   description = "The catalog name for Databricks resources"
   type        = string
-  default     = "dbr_dev"
+  default     = "ronevych_test"
 }
 
 variable "schema" {
   description = "The schema name for Databricks resources"
   type        = string
-  default     = "ronevych_gold"
+  default     = "gold"
 }
 
 variable "databricks_host" {

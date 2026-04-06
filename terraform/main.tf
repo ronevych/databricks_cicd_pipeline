@@ -11,16 +11,16 @@ provider "databricks" {
   token = var.databricks_token
 }
 
-resource "databricks_grants" "schema_permissions" {
-  schema = "dbr_dev.ronevych_test"
+resource "databricks_grants" "catalog_permissions" {
+  catalog = "ronevych_test"
 
   grant {
     principal  = "lbiel@softserve.academy"
-    privileges = ["ALL_PRIVILEGES"]
+    privileges = ["USE_CATALOG", "USE_SCHEMA", "SELECT"]
   }
 
   grant {
     principal  = "account users"
-    privileges = ["USE_SCHEMA", "SELECT"]
+    privileges = ["USE_CATALOG", "USE_SCHEMA", "SELECT"]
   }
 }
