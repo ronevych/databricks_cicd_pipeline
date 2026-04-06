@@ -1,0 +1,35 @@
+bundle:
+  name: ronevych_videogames
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://adb-7405605185991044.4.azuredatabricks.net
+
+resources:
+  pipelines:
+    ronevych_vgs_pipeline:
+      name: "[dev ronevych] lab6_videogames_etl"
+      
+      catalog: dbr_dev
+      schema: ronevych_gold 
+      
+      configuration:
+        spark.env.PYTHONPATH: "/Workspace/Users/dmytro874@softserve.academy/.bundle/ronevych_videogames/dev/files/src/Lab5"
+
+      libraries:
+        - file: { path: ./src/Lab5/utilities/data_contracts.py }
+        - file: { path: ./src/Lab5/transformations/01_bronze.py }
+        - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
+        - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
+        - file: { path: ./src/Lab5/transformations/04_gold.py }
+      
+      development: true
+      serverless: true
+      channel: CURRENT
+      photon: true
+
+      tags:
+        "dev": "ronevych"
+        "lab": "6"

@@ -1,0 +1,38 @@
+name: "CI/CD: DEV to TEST"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve \
+            -var="databricks_host=${{ env.DATABRICKS_HOST }}" \
+            -var="databricks_token=${{ env.DATABRICKS_TOKEN }}"
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-databricks@v0.7.0
+
+      - name: Bundle Deploy to TEST
+        run: databricks bundle deploy -t test
+
+      - name: Run Pipeline in TEST
+        run: databricks bundle run ronevych_vgs_pipeline -t test
