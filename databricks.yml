@@ -13,7 +13,7 @@ variables:
     default: ronevych_gold
   sql_warehouse_id:
     description: "ID of the SQL Warehouse"
-    default: "bfab7bf7a47d6172" 
+    default: "a1f04664c7fcffa4"
 
 targets:
   dev:
@@ -29,7 +29,7 @@ targets:
     mode: production
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
-      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${target.name}
+      root_path: /Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog: dbr_dev
       schema: ronevych_test
@@ -40,15 +40,12 @@ resources:
       name: "[${bundle.target} ronevych] lab6_videogames_etl"
       catalog: ${var.catalog}
       target: ${var.schema}
-      
       configuration:
         spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
-
       libraries:
         - file: { path: ./src/Lab5/utilities/data_contracts.py }
         - file: { path: ./src/Lab5/transformations/01_bronze.py }
-        - file: { path: ./src/Lab5/transformations/02_silver_scd.py } # ВИПРАВЛЕНО ТУТ
+        - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
         - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
         - file: { path: ./src/Lab5/transformations/04_gold.py }
-      
       serverless: true
