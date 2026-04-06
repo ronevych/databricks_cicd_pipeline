@@ -29,5 +29,5 @@ resource "databricks_grant" "admin_access" {
 resource "databricks_grant" "others_browse" {
   schema     = databricks_schema.test_schema.id
   principal  = "account users"
-  privileges = ["USAGE", "BROWSE"] 
+  privileges = ["USAGE"] 
 }
