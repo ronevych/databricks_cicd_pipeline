@@ -38,4 +38,4 @@ jobs:
         run: databricks bundle deploy -t test --auto-approve
 
       - name: Run Pipeline in TEST
-        run: databricks bundle run ronevych_vgs_pipeline -t test --full-refresh
+        run: databricks bundle run ronevych_vgs_pipeline -t test --full-refresh-all
