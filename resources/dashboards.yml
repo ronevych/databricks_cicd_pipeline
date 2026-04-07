@@ -2,7 +2,8 @@ resources:
   dashboards:
     video_games_dashboard:
       display_name: "VG Sales Analytics [${bundle.target}]"
-      file_path: ../src/Lab5/dashboards/VideogamesDashboard.lvdash.json 
+      file_path: ../src/Lab5/dashboards/VideogamesDashboard.lvdash.json
+      parent_path: /Users/dmytro874@softserve.academy/Lab7/${bundle.target}/Dashboards
       
       warehouse_id: ${var.sql_warehouse_id}
       
