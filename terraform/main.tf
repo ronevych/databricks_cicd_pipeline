@@ -11,12 +11,29 @@ provider "databricks" {
   token = var.databricks_token
 }
 
+# 1. Створюємо схеми
+resource "databricks_schema" "bronze" {
+  catalog_name = "ronevych_test"
+  name         = "bronze"
+}
+
+resource "databricks_schema" "silver" {
+  catalog_name = "ronevych_test"
+  name         = "silver"
+}
+
+resource "databricks_schema" "gold" {
+  catalog_name = "ronevych_test"
+  name         = "gold"
+}
+
+# 2. Оновлюємо права (тепер на весь каталог)
 resource "databricks_grants" "catalog_permissions" {
   catalog = "ronevych_test"
 
   grant {
     principal  = "lbiel@softserve.academy"
-    privileges = ["USE_CATALOG", "USE_SCHEMA", "SELECT"]
+    privileges = ["ALL_PRIVILEGES"]
   }
 
   grant {

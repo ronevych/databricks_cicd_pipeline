@@ -1,9 +1,12 @@
 import sys
 import dlt
 from pyspark.sql.functions import *
+from pyspark.sql import SparkSession
 
-path = "/Workspace/Users/dmytro874@softserve.academy/.bundle/ronevych_videogames/dev/files/src/Lab5"
-if path not in sys.path:
+spark = SparkSession.builder.getOrCreate()
+path = spark.conf.get("spark.env.PYTHONPATH", "")
+
+if path and path not in sys.path:
     sys.path.append(path)
 
 from utilities.data_contracts import VIDEO_GAMES_SCHEMA, EXPECTATIONS
@@ -12,6 +15,7 @@ data_path = "/Volumes/dbr_dev/ronevych_raw/videogames_volume/"
 
 @dlt.table(
     name = "video_games_bronze_bundle", 
+    schema = "bronze", 
     comment = "Raw video games data"
 )
 @dlt.expect_all_or_drop(EXPECTATIONS)

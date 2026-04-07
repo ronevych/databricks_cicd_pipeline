@@ -9,7 +9,7 @@ variables:
     description: "Catalog name"
     default: ronevych_test
   schema:
-    description: "Schema name"
+    description: "Schema name" 
     default: gold
   sql_warehouse_id:
     description: "ID of the SQL Warehouse"
@@ -24,21 +24,6 @@ targets:
     variables:
       catalog: dbr_dev
       schema: ronevych_gold
-    resources:
-      pipelines:
-        ronevych_vgs_pipeline:
-          name: "[dev ronevych] lab6_videogames_etl"
-          catalog: dbr_dev
-          target: ronevych_gold
-          configuration:
-            spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
-          libraries:
-            - file: { path: ./src/Lab5/utilities/data_contracts.py }
-            - file: { path: ./src/Lab5/transformations/01_bronze.py }
-            - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
-            - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
-            - file: { path: ./src/Lab5/transformations/04_gold.py }
-          serverless: true
 
   test:
     mode: production
@@ -48,21 +33,19 @@ targets:
     variables:
       catalog: ronevych_test
       schema: gold
-    resources:
-      pipelines:
-        ronevych_vgs_pipeline_test:
-          name: "[test ronevych] lab6_videogames_etl_managed"
-          catalog: ronevych_test
-          target: gold
-          configuration:
-            spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
-          libraries:
-            - file: { path: ./src/Lab5/utilities/data_contracts.py }
-            - file: { path: ./src/Lab5/transformations/01_bronze.py }
-            - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
-            - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
-            - file: { path: ./src/Lab5/transformations/04_gold.py }
-          serverless: true
 
 resources:
-  dashboards:
+  pipelines:
+    ronevych_vgs_pipeline:
+      name: "[${bundle.target} ronevych] lab6_videogames_etl"
+      catalog: ${var.catalog}
+      target: ${var.schema}
+      configuration:
+        spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
+      libraries:
+        - file: { path: ./src/Lab5/utilities/data_contracts.py }
+        - file: { path: ./src/Lab5/transformations/01_bronze.py }
+        - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
+        - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
+        - file: { path: ./src/Lab5/transformations/04_gold.py }
+      serverless: true

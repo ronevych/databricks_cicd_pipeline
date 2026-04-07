@@ -1,10 +1,13 @@
 import sys
 import dlt
 from pyspark.sql.functions import *
+from pyspark.sql import SparkSession
 
-path = "/Workspace/Users/dmytro874@softserve.academy/.bundle/ronevych_videogames/dev/files/src/Lab5"
-if path not in sys.path:
+spark = SparkSession.builder.getOrCreate()
+path = spark.conf.get("spark.env.PYTHONPATH", "")
+if path and path not in sys.path:
     sys.path.append(path)
+    
 from utilities.data_contracts import SILVER_EXPECTATIONS
 
 @dlt.view(name="video_games_bronze_clean_bundle")
@@ -31,6 +34,7 @@ def video_games_bronze_clean():
 
 dlt.create_streaming_table(
     name="video_games_silver_scd_bundle", 
+    schema="silver", 
     comment="Full history of games (SCD2)"
 )
 

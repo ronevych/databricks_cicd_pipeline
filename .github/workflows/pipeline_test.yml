@@ -26,10 +26,7 @@ jobs:
           terraform init
           terraform apply -auto-approve \
             -var="databricks_host=${{ env.DATABRICKS_HOST }}" \
-            -var="databricks_token=${{ env.DATABRICKS_TOKEN }}" \
-            -var="catalog=ronevych_test" \
-            -var="schema=gold" \
-            -var="sql_warehouse_id=a1f04664c7fcffa4"
+            -var="databricks_token=${{ env.DATABRICKS_TOKEN }}"
 
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
@@ -38,7 +35,7 @@ jobs:
         run: databricks bundle validate -t test
 
       - name: Bundle Deploy to TEST
-        run: databricks bundle deploy -t test --auto-approve
+        run: databricks bundle deploy -t test 
 
       - name: Run Pipeline in TEST
-        run: databricks bundle run ronevych_vgs_pipeline_test -t test --restart
+        run: databricks bundle run ronevych_vgs_pipeline -t test --full-refresh
