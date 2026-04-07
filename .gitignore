@@ -8,3 +8,17 @@ scratch/**
 !scratch/README.md
 **/explorations/**
 **/!explorations/README.md
+.bundle/
+.vscode/
+.idea/
+target/
+*.dbfs
+*.pyc
+
+# Project-specific exclusions
+fixtures/
+tests/
+README.md
+pyproject.toml
+src/Lab5_etl/
+src/sample_notebook.ipynb
