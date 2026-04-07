@@ -6,28 +6,14 @@ terraform {
   }
 }
 
+variable "databricks_host" {}
+variable "databricks_token" {}
+
 provider "databricks" {
   host  = var.databricks_host
   token = var.databricks_token
 }
 
-# 1. Створюємо схеми
-resource "databricks_schema" "bronze" {
-  catalog_name = "ronevych_test"
-  name         = "bronze"
-}
-
-resource "databricks_schema" "silver" {
-  catalog_name = "ronevych_test"
-  name         = "silver"
-}
-
-resource "databricks_schema" "gold" {
-  catalog_name = "ronevych_test"
-  name         = "gold"
-}
-
-# 2. Оновлюємо права (тепер на весь каталог)
 resource "databricks_grants" "catalog_permissions" {
   catalog = "ronevych_test"
 
