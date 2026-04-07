@@ -9,7 +9,7 @@ variables:
     description: "Catalog name"
     default: ronevych_test
   schema:
-    description: "Schema name" 
+    description: "Primary schema for metadata" 
     default: gold
   sql_warehouse_id:
     description: "ID of the SQL Warehouse"
@@ -21,19 +21,24 @@ targets:
     mode: development
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
-      root_path: /Users/dmytro874@softserve.academy/Lab7/dev
+      root_path: /Users/${workspace.current_user.userName}/Lab7/dev
     variables:
-      catalog: dbr_dev
-      schema: ronevych_gold
+      catalog: ronevych_test
+      schema: gold
 
   test:
     mode: production
     workspace:
       host: https://adb-7405605185991044.4.azuredatabricks.net
-      root_path: /Users/dmytro874@softserve.academy/Lab7/test
+      root_path: /Users/${workspace.current_user.userName}/Lab7/test
     variables:
       catalog: ronevych_test
       schema: gold
+    permissions:
+      - user_name: lbiel@softserve.academy
+        level: CAN_MANAGE
+      - group_name: users
+        level: CAN_READ
 
 resources:
   pipelines:
@@ -59,17 +64,23 @@ resources:
   jobs:
     ronevych_lab7_workflow:
       name: "[${bundle.target}] VideoGames End-to-End Workflow"
-      
       job_clusters:
         - job_cluster_key: security_cluster
           new_cluster:
             spark_version: "15.4.x-scala2.12"
             node_type_id: "Standard_F4"
             num_workers: 1
-            custom_tags:
-              project: "lab7"
-
       tasks:
         - task_key: run_gold_layer_pipeline
           pipeline_task:
             pipeline_id: ${resources.pipelines.ronevych_vgs_pipeline.id}
+
+        - task_key: apply_rls_cls
+          depends_on:
+            - task_key: run_gold_layer_pipeline
+          job_cluster_key: security_cluster
+          notebook_task:
+            notebook_path: ${workspace.file_path}/src/Lab5/security/security_policies.py
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
