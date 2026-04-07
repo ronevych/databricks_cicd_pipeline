@@ -38,7 +38,7 @@ targets:
       - user_name: lbiel@softserve.academy
         level: CAN_MANAGE
       - group_name: users
-        level: CAN_READ
+        level: CAN_VIEW
 
 resources:
   pipelines:
