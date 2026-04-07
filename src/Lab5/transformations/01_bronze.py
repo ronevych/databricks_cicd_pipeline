@@ -14,8 +14,7 @@ from utilities.data_contracts import VIDEO_GAMES_SCHEMA, EXPECTATIONS
 data_path = "/Volumes/dbr_dev/ronevych_raw/videogames_volume/"
 
 @dlt.table(
-    name = "video_games_bronze_bundle", 
-    schema = "bronze", 
+    name = "bronze.video_games_bronze_bundle", 
     comment = "Raw video games data"
 )
 @dlt.expect_all_or_drop(EXPECTATIONS)

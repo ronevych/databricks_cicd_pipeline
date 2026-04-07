@@ -1,16 +1,15 @@
 import dlt
 from pyspark.sql.functions import col, sum, count, avg, round, current_timestamp
 
-# Dimensions 
+# --- Dimensions ---
 
 @dlt.table(
-    name="ronevych_gold.dim_game_bundle",
+    name="gold.dim_game_bundle", 
     comment="Dimension: Unique games metadata"
 )
 def dim_game():
-    # ВИПРАВЛЕНО
     return (
-        dlt.read("video_games_silver_latest_bundle")
+        dlt.read("silver.video_games_silver_latest_bundle") 
             .select(
                 col("game_rank").alias("game_id"), 
                 "game_name", 
@@ -21,25 +20,25 @@ def dim_game():
     )
 
 @dlt.table(
-    name="ronevych_gold.dim_publisher_bundle",
+    name="gold.dim_publisher_bundle", 
     comment="Dimension: Unique publishers"
 )
 def dim_publisher():
     return (
-        dlt.read("video_games_silver_latest_bundle")
+        dlt.read("silver.video_games_silver_latest_bundle")
             .select("publisher")
             .distinct()
     )
 
-# Fact Table 
+# --- Fact Table ---
 
 @dlt.table(
-    name="ronevych_gold.fact_sales_bundle",
+    name="gold.fact_sales_bundle",
     comment="Fact: Sales transactions per game/platform"
 )
 def fact_sales():
     return (
-        dlt.read("video_games_silver_latest_bundle")
+        dlt.read("silver.video_games_silver_latest_bundle") 
             .select(
                 col("game_rank").alias("game_id"),
                 "publisher",
@@ -53,14 +52,14 @@ def fact_sales():
             )
     )
 
-# Aggregations 
+# --- Aggregations ---
 
 @dlt.table(
-    name="ronevych_gold.gold_publisher_performance_bundle"
+    name="gold.gold_publisher_performance_bundle"
 )
 def gold_publisher_performance():
     return (
-        dlt.read("ronevych_gold.fact_sales_bundle")
+        dlt.read("gold.fact_sales_bundle")
             .groupBy("publisher")
             .agg(
                 round(sum("sales_global"), 2).alias("total_global_sales"),
@@ -70,11 +69,11 @@ def gold_publisher_performance():
     )
 
 @dlt.table(
-    name="ronevych_gold.gold_genre_trends_bundle"
+    name="gold.gold_genre_trends_bundle"
 )
 def gold_genre_trends():
-    df_fact = dlt.read("ronevych_gold.fact_sales_bundle")
-    df_dim = dlt.read("ronevych_gold.dim_game_bundle")
+    df_fact = dlt.read("gold.fact_sales_bundle")
+    df_dim = dlt.read("gold.dim_game_bundle")
     
     return (
         df_fact.join(df_dim, "game_id")

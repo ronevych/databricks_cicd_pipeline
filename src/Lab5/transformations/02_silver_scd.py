@@ -14,7 +14,7 @@ from utilities.data_contracts import SILVER_EXPECTATIONS
 @dlt.expect_all_or_drop(SILVER_EXPECTATIONS)
 def video_games_bronze_clean():
     return (
-        dlt.read_stream("video_games_bronze_bundle") 
+        dlt.read_stream("bronze.video_games_bronze_bundle") 
             .select(
                 col("Rank").alias("game_rank"),
                 trim(col("Name")).alias("game_name"),
@@ -33,13 +33,12 @@ def video_games_bronze_clean():
     )
 
 dlt.create_streaming_table(
-    name="video_games_silver_scd_bundle", 
-    schema="silver", 
+    name="silver.video_games_silver_scd_bundle", 
     comment="Full history of games (SCD2)"
 )
 
 dlt.apply_changes(
-    target="video_games_silver_scd_bundle",
+    target="silver.video_games_silver_scd_bundle",
     source="video_games_bronze_clean_bundle", 
     keys=["game_rank"],                
     sequence_by=col("_ingestion_timestamp"),

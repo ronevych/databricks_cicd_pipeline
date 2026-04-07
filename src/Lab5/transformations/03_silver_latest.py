@@ -11,8 +11,7 @@ if path and path not in sys.path:
 from utilities.data_contracts import SILVER_EXPECTATIONS
 
 @dlt.table(
-    name="video_games_silver_latest_bundle", 
-    schema="silver",  
+    name="silver.video_games_silver_latest_bundle", 
     comment="Cleaned data without history"
 )
 @dlt.expect_all_or_drop(SILVER_EXPECTATIONS)
