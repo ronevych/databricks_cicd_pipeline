@@ -38,9 +38,15 @@ targets:
 resources:
   pipelines:
     ronevych_vgs_pipeline:
-      name: "[${bundle.target} ronevych] lab6_videogames_etl"
+      name: "[${bundle.target} ronevych] lab7_videogames_etl"
       catalog: ${var.catalog}
       target: ${var.schema}
+      
+      clusters:
+        - label: default
+          node_type_id: "Standard_F4"
+          num_workers: 1
+          
       configuration:
         spark.env.PYTHONPATH: "${workspace.file_path}/src/Lab5"
       libraries:
@@ -49,4 +55,21 @@ resources:
         - file: { path: ./src/Lab5/transformations/02_silver_scd.py }
         - file: { path: ./src/Lab5/transformations/03_silver_latest.py }
         - file: { path: ./src/Lab5/transformations/04_gold.py }
-      serverless: true
+
+  jobs:
+    ronevych_lab7_workflow:
+      name: "[${bundle.target}] VideoGames End-to-End Workflow"
+      
+      job_clusters:
+        - job_cluster_key: security_cluster
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_F4"
+            num_workers: 1
+            custom_tags:
+              project: "lab7"
+
+      tasks:
+        - task_key: run_gold_layer_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.ronevych_vgs_pipeline.id}
